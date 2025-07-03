@@ -1,10 +1,11 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import userRouter from './routes/userRouter.js'
-import productRouter from './routes/productRouter.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import ConnectToDb from './config/db.js'
+import digitalRouter from './routes/digitalRouter.js'
+import clothRouter from './routes/clothRouter.js'
 
 dotenv.config()
 
@@ -29,7 +30,8 @@ app.use(
 //  routes  //
 
 app.use('/api/auth', userRouter)
-app.use('/api/products', productRouter)
+app.use('/api/digitals', digitalRouter)
+app.use('/api/cloth', clothRouter)
 
 //  running server //
 const PORT = process.env.PORT || 8000
