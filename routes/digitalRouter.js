@@ -1,6 +1,7 @@
 import express from 'express'
 import getAllCategoriesController from '../controller/digital/getAllCategories.js'
-import filteringDigitalProducts from '../controller/digital/getDigitalsByCategory.js'
+import filteringDigitalProducts from '../controller/digital/getDigitalsByfilters.js'
+
 
 
 const digitalRouter = express.Router()
