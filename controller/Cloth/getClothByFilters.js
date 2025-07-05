@@ -18,8 +18,8 @@ const filteringClothProducts = async (req, res) => {
     const pageNumber = req.query.pageNumber || 1
 
     let query = {}
-    if (category && category.toLowerCase() !== 'all') {
-      query.category = category.toLowerCase()
+    if (category && category !== 'all') {
+      query.category = category
     }
     if (brand && brand !== 'all') query.brand = brand
     if (colors) query.colors = { $in: [colors] }
