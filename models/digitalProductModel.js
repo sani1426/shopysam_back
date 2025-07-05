@@ -14,7 +14,7 @@ const digitalProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    Images: {
+    images: {
       type: [String],
     },
     tags: {
