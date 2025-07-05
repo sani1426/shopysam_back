@@ -23,7 +23,7 @@ app.use(
       'Expires',
       'Pragma',
     ],
-    preflightContinue: false,
+    preflightContinue: true,
   })
 )
 
