@@ -8,7 +8,6 @@ const clothSchema = new Schema({
   category: {
     type: String,
     required: true,
-    trim: true,
   },
   images: {
     type: [String],
