@@ -1,10 +1,8 @@
-import ClothModel from "../../models/clothModel.js"
-
+import ClothModel from '../../models/clothModel.js'
 
 const filteringClothProducts = async (req, res) => {
   try {
     const {
-      category,
       brand,
       tags,
       sizes,
@@ -14,13 +12,12 @@ const filteringClothProducts = async (req, res) => {
       sortBy,
       search,
       ppg,
+      category,
     } = req.query
     const pageNumber = req.query.pageNumber || 1
 
     let query = {}
-    if (category && category !== 'all') {
-      query.category = category.toLowerCase()
-    }
+
     if (brand && brand !== 'all') query.brand = brand
     if (colors) query.colors = { $in: [colors] }
     if (sizes) query.sizes = { $in: [sizes] }
@@ -31,6 +28,7 @@ const filteringClothProducts = async (req, res) => {
       if (minPrice) query.price.$gte = Number(minPrice)
       if (maxPrice) query.price.$lte = Number(maxPrice)
     }
+    if (category) query.category = category
 
     if (search) {
       query.$or = [
@@ -53,7 +51,8 @@ const filteringClothProducts = async (req, res) => {
       }
     }
     const clothes = await ClothModel.find(query)
-      .sort(sort).skip((Number(pageNumber) - 1) * Number(ppg))
+      .sort(sort)
+      .skip((Number(pageNumber) - 1) * Number(ppg))
       .limit(Number(ppg))
 
     res.status(200).json({
