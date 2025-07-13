@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs'
-import UserModel from '../../models/userModel.js'
 import jwt from 'jsonwebtoken'
+import UserModel from '../../models/userModel.js'
+import sendEmail from '../../config/sendEmail.js'
+import verifyEmailTemplate from '../../utils/verifyEmailTemplates.js'
 
 // // register controller // //
 const registerController = async (req, res) => {
@@ -31,6 +33,18 @@ const registerController = async (req, res) => {
       gender: gender,
     })
     const newUser = await user.save()
+
+    const verifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${newUser?._id}`
+    const verifyEmailSend =await sendEmail({
+      sendTo: email ,
+      subject :"Verify email from Shopysam" ,
+      html: verifyEmailTemplate({
+        name : name ,
+        url : verifyEmailUrl
+      })
+    })
+
+
     res.status(201).json({
       error: false,
       success: true,

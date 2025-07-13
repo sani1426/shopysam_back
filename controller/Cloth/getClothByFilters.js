@@ -11,10 +11,10 @@ const filteringClothProducts = async (req, res) => {
       maxPrice,
       sortBy,
       search,
-      ppg,
       category,
     } = req.query
     const pageNumber = req.query.pageNumber || 1
+    const ppg = req.query.ppg || 10
 
     let query = {}
 
