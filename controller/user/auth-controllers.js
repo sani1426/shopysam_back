@@ -34,12 +34,12 @@ const registerController = async (req, res) => {
     })
     const newUser = await user.save()
 
-    const verifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${newUser?._id}`
+    const verifyEmailUrl = `http://localhost:5173/verify-email?code=${newUser._id}`
     const verifyEmailSend =await sendEmail({
       sendTo: email ,
       subject :"Verify email from Shopysam" ,
       html: verifyEmailTemplate({
-        name : name ,
+      name ,
         url : verifyEmailUrl
       })
     })
