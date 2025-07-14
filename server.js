@@ -11,6 +11,7 @@ dotenv.config()
 
 const app = express()
 app.use(cookieParser())
+// app.use(express.urlencoded())
 app.use(express.json())
 app.use(
   cors({
