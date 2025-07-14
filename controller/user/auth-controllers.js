@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import UserModel from '../../models/userModel.js'
 import sendEmail from '../../config/sendEmail.js'
 import verifyEmailTemplate from '../../utils/verifyEmailTemplates.js'
+import uploadImageCloudinary from '../../utils/cloudinaryUpload.js'
 
 // // register controller // //
 const registerController = async (req, res) => {
@@ -56,9 +57,7 @@ const registerController = async (req, res) => {
     })
   }
 }
-
 // // end of register controller// //
-
 
 // // verify email controller// //
 const  verifyEmailController = async (req , res) => {
@@ -91,9 +90,7 @@ const  verifyEmailController = async (req , res) => {
     })
   }
 }
-
 //  // end of verify email controller // //
-
 
 //  // login controller // //
 const loginController = async (req, res) => {
@@ -195,8 +192,31 @@ const logoutController = async (req, res) => {
 }
 // // logout controller //
 
-//  // user details controller //
+// // upload avatar controller //
+const uploadAvatarController = async (req , res) => {
+  try {
+    const image = req.file
+    const upload = await  uploadImageCloudinary(image)
+    console.log('image' , image)
+    
+    res.status(200).json({
+      error : false ,
+      success : true ,
+      message : "upload successfully" ,
+      data: upload
+    })
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      success: false,
+      message: 'server error',
+    })
+  }
+}
 
+// // end of upload avatar controller //
+
+//  // user details controller //
 const userDetailsController = async (req, res) => {
   try {
     const user = await UserModel.findById(req.userId)
@@ -230,4 +250,5 @@ export {
   logoutController,
   userDetailsController,
   verifyEmailController,
+  uploadAvatarController,
 }
