@@ -116,6 +116,15 @@ const loginController = async (req, res) => {
       })
     }
 
+
+    if(!user?.verify_email){
+      return res.status(402).json({
+        error : true ,
+        success : false ,
+        message : "Verify Your Email First "
+      })
+    }
+
     if(user?.status !== "Active"){
       return res.status(402).json({
         error : true ,
