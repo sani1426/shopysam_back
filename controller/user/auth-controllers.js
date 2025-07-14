@@ -209,7 +209,7 @@ const uploadAvatarController = async (req , res) => {
     res.status(500).json({
       error: true,
       success: false,
-      message: 'server error',
+      message: `server error ${error} `,
     })
   }
 }
