@@ -38,10 +38,7 @@ const registerController = async (req, res) => {
     const verifyEmailSend =await  sendEmail({
       sendTo: email ,
       subject :"Verify email from Shopysam" ,
-      html: verifyEmailTemplate({
-      name ,
-        url : verifyEmailUrl
-      })
+      html: verifyEmailTemplate(name , verifyEmailUrl)
     })
 
 
