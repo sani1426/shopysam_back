@@ -56,7 +56,6 @@ const registerController = async (req, res) => {
     })
   }
 }
-// // end of register controller// //
 
 // // verify email controller// //
 const verifyEmailController = async (req, res) => {
@@ -91,7 +90,6 @@ const verifyEmailController = async (req, res) => {
     })
   }
 }
-//  // end of verify email controller // //
 
 //  // login controller // //
 const loginController = async (req, res) => {
@@ -165,7 +163,6 @@ const loginController = async (req, res) => {
     })
   }
 }
-//  // end of login controller //
 
 // // logout controller //
 const logoutController = async (req, res) => {
@@ -190,7 +187,6 @@ const logoutController = async (req, res) => {
     })
   }
 }
-// // logout controller //
 
 // // upload avatar controller //
 const uploadAvatarController = async (req, res) => {
@@ -217,8 +213,6 @@ const uploadAvatarController = async (req, res) => {
     })
   }
 }
-
-// // end of upload avatar controller //
 
 //  // user details controller //
 const userDetailsController = async (req, res) => {
