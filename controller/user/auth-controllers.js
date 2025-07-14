@@ -59,6 +59,8 @@ const registerController = async (req, res) => {
 
 // // end of register controller// //
 
+
+// // verify email controller// //
 const  verifyEmailController = async (req , res) => {
 
   try {
@@ -90,6 +92,9 @@ const  verifyEmailController = async (req , res) => {
   }
 }
 
+//  // end of verify email controller // //
+
+
 //  // login controller // //
 const loginController = async (req, res) => {
   try {
@@ -103,39 +108,47 @@ const loginController = async (req, res) => {
     }
 
     const user = await UserModel.findOne({ email })
-    if (user) {
-      const checkPass = bcrypt.compareSync(password, user.password)
-      if (!checkPass) {
-        return res.status(400).json({
-          error: true,
-          success: false,
-          message: 'password is wrong 😡😡',
-        })
-      } else {
-        const tokenData = {
-          _id: user._id,
-        }
-        const tokenOption = {
-          httpOnly: true,
-          secure: true,
-          sameSite: 'None',
-        }
-        const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
-          expiresIn: 60 * 60 * 8,
-        })
-
-        res.status(200).cookie('token', token, tokenOption).json({
-          error: false,
-          success: true,
-          message: 'successfully loged in',
-          data: token,
-        })
-      }
-    } else {
+    if (!user) {
       return res.status(404).json({
         error: true,
         success: false,
-        message: 'User doesnt exists! Please register first',
+        message: "User doesnt exists! Please register first",
+      })
+    }
+
+    if(user?.status !== "Active"){
+      return res.status(402).json({
+        error : true ,
+        success : false ,
+        message : "Contact to Admin"
+      })
+    }
+
+    const checkPass = bcrypt.compareSync(password, user.password)
+    if (!checkPass) {
+      return res.status(400).json({
+        error: true,
+        success: false,
+        message: 'password is wrong 😡😡',
+      })
+    } else {
+      const tokenData = {
+        _id: user._id,
+      }
+      const tokenOption = {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+      }
+      const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
+        expiresIn: '12h'
+      })
+
+      res.status(200).cookie('token', token, tokenOption).json({
+        error: false,
+        success: true,
+        message: 'successfully loged in',
+        data: token,
       })
     }
   } catch (error) {
