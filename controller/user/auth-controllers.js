@@ -59,6 +59,37 @@ const registerController = async (req, res) => {
 
 // // end of register controller// //
 
+const  verifyEmailController = async (req , res) => {
+
+  try {
+    const {code} = req.body
+
+    const user = await UserModel.findById(code)
+
+    if(!user) {
+      return res.status(404).json({
+        error: true ,
+        success: false ,
+        message : "Invalid Code"
+      })
+    }
+    const updateUser = await UserModel.updateOne({_id : code},{
+      verify_email: true
+    })
+    res.status(200).json({
+      error : false,
+      success : true ,
+      message : "verify Email Done ❤❤✨"
+    })
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      success: false,
+      message: `server error ${error}`,
+    })
+  }
+}
+
 //  // login controller // //
 const loginController = async (req, res) => {
   try {
@@ -171,4 +202,5 @@ export {
   loginController,
   logoutController,
   userDetailsController,
+  verifyEmailController,
 }
