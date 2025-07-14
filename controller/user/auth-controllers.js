@@ -36,12 +36,11 @@ const registerController = async (req, res) => {
     const newUser = await user.save()
 
     const verifyEmailUrl = `http://localhost:5173/verify-email?code=${newUser._id}`
-    const verifyEmailSend =await  sendEmail({
-      sendTo: email ,
-      subject :"Verify email from Shopysam" ,
-      html: verifyEmailTemplate(name , verifyEmailUrl)
+    const verifyEmailSend = await sendEmail({
+      sendTo: email,
+      subject: 'Verify email from Shopysam',
+      html: verifyEmailTemplate(name, verifyEmailUrl),
     })
-
 
     res.status(201).json({
       error: false,
@@ -60,27 +59,29 @@ const registerController = async (req, res) => {
 // // end of register controller// //
 
 // // verify email controller// //
-const  verifyEmailController = async (req , res) => {
-
+const verifyEmailController = async (req, res) => {
   try {
-    const {code} = req.body
+    const { code } = req.body
 
     const user = await UserModel.findById(code)
 
-    if(!user) {
+    if (!user) {
       return res.status(404).json({
-        error: true ,
-        success: false ,
-        message : "Invalid Code"
+        error: true,
+        success: false,
+        message: 'Invalid Code',
       })
     }
-    const updateUser = await UserModel.updateOne({_id : code},{
-      verify_email: true
-    })
+    const updateUser = await UserModel.updateOne(
+      { _id: code },
+      {
+        verify_email: true,
+      }
+    )
     res.status(200).json({
-      error : false,
-      success : true ,
-      message : "verify Email Done ❤❤✨"
+      error: false,
+      success: true,
+      message: 'verify Email Done ❤❤✨',
     })
   } catch (error) {
     res.status(500).json({
@@ -109,24 +110,23 @@ const loginController = async (req, res) => {
       return res.status(404).json({
         error: true,
         success: false,
-        message: "User doesnt exists! Please register first",
+        message: 'User doesnt exists! Please register first',
       })
     }
 
-
-    if(!user?.verify_email){
+    if (!user?.verify_email) {
       return res.status(402).json({
-        error : true ,
-        success : false ,
-        message : "Verify Your Email First "
+        error: true,
+        success: false,
+        message: 'Verify Your Email First ',
       })
     }
 
-    if(user?.status !== "Active"){
+    if (user?.status !== 'Active') {
       return res.status(402).json({
-        error : true ,
-        success : false ,
-        message : "Contact to Admin"
+        error: true,
+        success: false,
+        message: 'Contact to Admin',
       })
     }
 
@@ -147,7 +147,7 @@ const loginController = async (req, res) => {
         sameSite: 'None',
       }
       const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
-        expiresIn: '12h'
+        expiresIn: '12h',
       })
 
       res.status(200).cookie('token', token, tokenOption).json({
@@ -175,7 +175,7 @@ const logoutController = async (req, res) => {
       secure: true,
       sameSite: 'None',
     }
-    res.clearCookie('token' , tokenOption)
+    res.clearCookie('token', tokenOption)
 
     res.status(200).json({
       success: true,
@@ -193,17 +193,21 @@ const logoutController = async (req, res) => {
 // // logout controller //
 
 // // upload avatar controller //
-const uploadAvatarController = async (req , res) => {
+const uploadAvatarController = async (req, res) => {
   try {
+    const userId = req.userId
     const image = req.file
-    const upload = await  uploadImageCloudinary(image)
-    console.log('image' , image)
-    
+    const upload = await uploadImageCloudinary(image)
+
+    const updateUser = await UserModel.findByIdAndUpdate(userId, {
+      avatar: upload?.url,
+    })
+
     res.status(200).json({
-      error : false ,
-      success : true ,
-      message : "upload successfully" ,
-      data: upload
+      error: false,
+      success: true,
+      message: 'upload successfully',
+      data: updateUser,
     })
   } catch (error) {
     res.status(500).json({
