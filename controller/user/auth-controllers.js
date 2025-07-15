@@ -245,28 +245,32 @@ const userDetailsController = async (req, res) => {
 }
 
 // // update user details // //
-const updateUserDetailsController = async (req , res) => {
+const updateUserDetailsController = async (req, res) => {
   try {
     const userId = req.userId //auth middleware
-    const { name, email, mobile, password,gender } = req.body 
+    const { name, email, mobile, password, gender } = req.body
 
     let hashPassword = ''
-    if(password){
-      hashPassword = await bcrypt.hashSync(password , 10)
+    if (password) {
+      hashPassword = await bcrypt.hashSync(password, 10)
     }
-    const updateUser = await UserModel.updateOne({_id : userId} , {
-      ...(name && { name : name }),
-      ...(email && { email : email }),
-      ...(mobile && { mobile : mobile }),
-      ...(gender && { gender : gender }),
-      ...(password && { password : hashPassword }),
-    },{new:true})
+    const updateUser = await UserModel.updateOne(
+      { _id: userId },
+      {
+        ...(name && { name: name }),
+        ...(email && { email: email }),
+        ...(mobile && { mobile: mobile }),
+        ...(gender && { gender: gender }),
+        ...(password && { password: hashPassword }),
+      },
+      { new: true }
+    )
 
     res.status(200).json({
-      error: false ,
-      success : true ,
-      message : "successfully updated" ,
-      data: updateUser
+      error: false,
+      success: true,
+      message: 'successfully updated',
+      data: updateUser,
     })
   } catch (error) {
     res.status(500).json({
@@ -277,43 +281,41 @@ const updateUserDetailsController = async (req , res) => {
   }
 }
 
-//forgot password not login // // 
-const forgotPasswordController = async (req,res) => {
+//forgot password not login // //
+const forgotPasswordController = async (req, res) => {
   try {
-    
-    const {email} = req.body
+    const { email } = req.body
     const user = await UserModel.findOne({ email })
 
-    if(!user){
-        return res.status(404).json({
-            message : "Email not available",
-            error : true,
-            success : false
-        })
+    if (!user) {
+      return res.status(404).json({
+        message: 'Email not available',
+        error: true,
+        success: false,
+      })
     }
     const otp = generatedOtp()
     const expireTime = new Date() + 60 * 60 * 1000 // 1hr
 
-    const update = await UserModel.findByIdAndUpdate(user._id,{
-        forgot_password_otp : otp,
-        forgot_password_expiry : new Date(expireTime).toISOString()
+    const update = await UserModel.findByIdAndUpdate(user._id, {
+      forgot_password_otp: otp,
+      forgot_password_expiry: new Date(expireTime).toISOString(),
     })
 
     await sendEmail({
-        sendTo : email,
-        subject : "Forgot password from Shopysam",
-        html : forgotPasswordTemplate({
-            name : user.name,
-            otp : otp
-        })
+      sendTo: email,
+      subject: 'Forgot password from Shopysam',
+      html: forgotPasswordTemplate({
+        name: user.name,
+        otp: otp,
+      }),
     })
 
     return res.json({
-        message : "check your email",
-        error : false,
-        success : true
+      message: 'check your email',
+      error: false,
+      success: true,
     })
-
   } catch (error) {
     res.status(500).json({
       error: true,
@@ -324,119 +326,118 @@ const forgotPasswordController = async (req,res) => {
 }
 
 //  // verify forgot password otp // //
-const verifyForgotPasswordOtpController = async (req , res) => {
+const verifyForgotPasswordOtpController = async (req, res) => {
   try {
-    const { email , otp }  = req.body
+    const { email, otp } = req.body
 
-    if(!email || !otp){
-        return res.status(400).json({
-            message : "Provide required field email, otp.",
-            error : true,
-            success : false
-        })
+    if (!email || !otp) {
+      return res.status(400).json({
+        message: 'Provide required field email, otp.',
+        error: true,
+        success: false,
+      })
     }
 
     const user = await UserModel.findOne({ email })
 
-    if(!user){
-        return res.status(400).json({
-            message : "Email not available",
-            error : true,
-            success : false
-        })
+    if (!user) {
+      return res.status(400).json({
+        message: 'Email not available',
+        error: true,
+        success: false,
+      })
     }
 
     const currentTime = new Date().toISOString()
 
-    if(user.forgot_password_expiry < currentTime  ){
-        return res.status(400).json({
-            message : "Otp is expired",
-            error : true,
-            success : false
-        })
+    if (user.forgot_password_expiry < currentTime) {
+      return res.status(400).json({
+        message: 'Otp is expired',
+        error: true,
+        success: false,
+      })
     }
 
-    if(otp !== user.forgot_password_otp){
-        return res.status(400).json({
-            message : "Invalid otp",
-            error : true,
-            success : false
-        })
+    if (otp !== user.forgot_password_otp) {
+      return res.status(400).json({
+        message: 'Invalid otp',
+        error: true,
+        success: false,
+      })
     }
 
     //if otp is not expired
     //otp === user.forgot_password_otp
 
-    const updateUser = await UserModel.findByIdAndUpdate(user?._id,{
-        forgot_password_otp : "",
-        forgot_password_expiry : ""
-    },{new:true})
-    
-    return res.json({
-        message : "Verify otp successfully",
-        error : false,
-        success : true
-    })
+    const updateUser = await UserModel.findByIdAndUpdate(
+      user?._id,
+      {
+        forgot_password_otp: '',
+        forgot_password_expiry: '',
+      },
+      { new: true }
+    )
 
-} catch (error) {
-    return res.status(500).json({
-        message : `server error ${error}`,
-        error : true,
-        success : false
+    return res.json({
+      message: 'Verify otp successfully',
+      error: false,
+      success: true,
     })
-}
+  } catch (error) {
+    return res.status(500).json({
+      message: `server error ${error}`,
+      error: true,
+      success: false,
+    })
+  }
 }
 
 // // reset password // //
-const resetPasswordController = async (req , res) => {
+const resetPasswordController = async (req, res) => {
   try {
-    const { email , newPassword, confirmPassword } = req.body 
+    const { email, newPassword } = req.body
 
-    if(!email || !newPassword || !confirmPassword){
-        return res.status(400).json({
-          error: true ,
-          success : false ,
-            message : "provide required fields email, newPassword, confirmPassword"
-        })
+    if (!email || !newPassword) {
+      return res.status(400).json({
+        error: true,
+        success: false,
+        message: 'provide required fields email, newPassword',
+      })
     }
 
     const user = await UserModel.findOne({ email })
 
-    if(!user){
-        return res.status(404).json({
-            message : "Email is not available",
-            error : true,
-            success : false
-        })
+    if (!user) {
+      return res.status(404).json({
+        message: 'Email is not available',
+        error: true,
+        success: false,
+      })
     }
 
-    if(newPassword !== confirmPassword){
-        return res.status(400).json({
-            message : "newPassword and confirmPassword must be same.",
-            error : true,
-            success : false,
-        })
-    }
-    const hashPassword = await bcrypt.hashSync(newPassword,10)
+    const hashPassword = await bcrypt.hashSync(newPassword, 10)
 
-    const update = await UserModel.findOneAndUpdate(user._id,{
-        password : hashPassword
-    },{new : true})
+    const update = await UserModel.findOneAndUpdate(
+      user._id,
+      {
+        password: hashPassword,
+      },
+      { new: true }
+    )
 
     return res.json({
-        message : "Password updated successfully.",
-        error : false,
-        success : true,
-        data: update
+      message: 'Password updated successfully.',
+      error: false,
+      success: true,
+      data: update,
     })
-
-} catch (error) {
+  } catch (error) {
     return res.status(500).json({
-        message : `server error ${error}`,
-        error : true,
-        success : false
+      message: `server error ${error}`,
+      error: true,
+      success: false,
     })
-}
+  }
 }
 
 export {
