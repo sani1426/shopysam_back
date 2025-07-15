@@ -285,7 +285,7 @@ const forgotPasswordController = async (req,res) => {
     const user = await UserModel.findOne({ email })
 
     if(!user){
-        return response.status(404).json({
+        return res.status(404).json({
             message : "Email not available",
             error : true,
             success : false
@@ -308,7 +308,7 @@ const forgotPasswordController = async (req,res) => {
         })
     })
 
-    return response.json({
+    return res.json({
         message : "check your email",
         error : false,
         success : true
@@ -326,10 +326,10 @@ const forgotPasswordController = async (req,res) => {
 //  // verify forgot password otp // //
 const verifyForgotPasswordOtpController = async (req , res) => {
   try {
-    const { email , otp }  = request.body
+    const { email , otp }  = req.body
 
     if(!email || !otp){
-        return response.status(400).json({
+        return res.status(400).json({
             message : "Provide required field email, otp.",
             error : true,
             success : false
@@ -339,7 +339,7 @@ const verifyForgotPasswordOtpController = async (req , res) => {
     const user = await UserModel.findOne({ email })
 
     if(!user){
-        return response.status(400).json({
+        return res.status(400).json({
             message : "Email not available",
             error : true,
             success : false
@@ -349,7 +349,7 @@ const verifyForgotPasswordOtpController = async (req , res) => {
     const currentTime = new Date().toISOString()
 
     if(user.forgot_password_expiry < currentTime  ){
-        return response.status(400).json({
+        return res.status(400).json({
             message : "Otp is expired",
             error : true,
             success : false
@@ -357,7 +357,7 @@ const verifyForgotPasswordOtpController = async (req , res) => {
     }
 
     if(otp !== user.forgot_password_otp){
-        return response.status(400).json({
+        return res.status(400).json({
             message : "Invalid otp",
             error : true,
             success : false
@@ -372,14 +372,14 @@ const verifyForgotPasswordOtpController = async (req , res) => {
         forgot_password_expiry : ""
     })
     
-    return response.json({
+    return res.json({
         message : "Verify otp successfully",
         error : false,
         success : true
     })
 
 } catch (error) {
-    return response.status(500).json({
+    return res.status(500).json({
         message : `server error ${error}`,
         error : true,
         success : false
@@ -390,10 +390,10 @@ const verifyForgotPasswordOtpController = async (req , res) => {
 // // reset password // //
 const resetPasswordController = async (req , res) => {
   try {
-    const { email , newPassword, confirmPassword } = request.body 
+    const { email , newPassword, confirmPassword } = req.body 
 
     if(!email || !newPassword || !confirmPassword){
-        return response.status(400).json({
+        return res.status(400).json({
           error: true ,
           success : false ,
             message : "provide required fields email, newPassword, confirmPassword"
@@ -403,7 +403,7 @@ const resetPasswordController = async (req , res) => {
     const user = await UserModel.findOne({ email })
 
     if(!user){
-        return response.status(404).json({
+        return res.status(404).json({
             message : "Email is not available",
             error : true,
             success : false
@@ -411,7 +411,7 @@ const resetPasswordController = async (req , res) => {
     }
 
     if(newPassword !== confirmPassword){
-        return response.status(400).json({
+        return res.status(400).json({
             message : "newPassword and confirmPassword must be same.",
             error : true,
             success : false,
@@ -423,7 +423,7 @@ const resetPasswordController = async (req , res) => {
         password : hashPassword
     },{new : true})
 
-    return response.json({
+    return res.json({
         message : "Password updated successfully.",
         error : false,
         success : true,
@@ -431,7 +431,7 @@ const resetPasswordController = async (req , res) => {
     })
 
 } catch (error) {
-    return response.status(500).json({
+    return res.status(500).json({
         message : `server error ${error}`,
         error : true,
         success : false
