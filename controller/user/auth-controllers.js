@@ -260,7 +260,7 @@ const updateUserDetailsController = async (req , res) => {
       ...(mobile && { mobile : mobile }),
       ...(gender && { gender : gender }),
       ...(password && { password : hashPassword }),
-    })
+    },{new:true})
 
     res.status(200).json({
       error: false ,
