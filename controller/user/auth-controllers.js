@@ -417,7 +417,7 @@ const resetPasswordController = async (req , res) => {
             success : false,
         })
     }
-    const hashPassword = await bcryptjs.hashSync(newPassword,10)
+    const hashPassword = await bcrypt.hashSync(newPassword,10)
 
     const update = await UserModel.findOneAndUpdate(user._id,{
         password : hashPassword
