@@ -301,7 +301,7 @@ const forgotPasswordController = async (req,res) => {
 
     await sendEmail({
         sendTo : email,
-        subject : "Forgot password from Binkeyit",
+        subject : "Forgot password from Shopysam",
         html : forgotPasswordTemplate({
             name : user.name,
             otp : otp
@@ -370,7 +370,7 @@ const verifyForgotPasswordOtpController = async (req , res) => {
     const updateUser = await UserModel.findByIdAndUpdate(user?._id,{
         forgot_password_otp : "",
         forgot_password_expiry : ""
-    })
+    },{new:true})
     
     return res.json({
         message : "Verify otp successfully",
