@@ -6,6 +6,7 @@ import {
   loginController,
   logoutController,
   registerController,
+  resetPasswordController,
   updateUserDetailsController,
   uploadAvatarController,
   userDetailsController,
