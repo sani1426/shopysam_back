@@ -248,7 +248,7 @@ const userDetailsController = async (req, res) => {
 const updateUserDetailsController = async (req , res) => {
   try {
     const userId = req.userId //auth middleware
-    const { name, email, mobile, password,gender } = request.body 
+    const { name, email, mobile, password,gender } = req.body 
 
     let hashPassword = ''
     if(password){
