@@ -2,12 +2,15 @@ import express from 'express'
 
 import verifyToken from '../middlewares/verifyToken.js'
 import {
+  forgotPasswordController,
   loginController,
   logoutController,
   registerController,
+  updateUserDetailsController,
   uploadAvatarController,
   userDetailsController,
   verifyEmailController,
+  verifyForgotPasswordOtpController,
 } from '../controller/user/auth-controllers.js'
 import upload from '../middlewares/multer.js'
 
@@ -24,5 +27,9 @@ userRouter.put(
 )
 userRouter.get('/logout', logoutController)
 userRouter.get('/details', verifyToken, userDetailsController)
+userRouter.put('/update-user', verifyToken,updateUserDetailsController)
+userRouter.put('/forgot-password',forgotPasswordController)
+userRouter.put('/verify-otp',verifyForgotPasswordOtpController)
+userRouter.put('/reset-password',resetPasswordController)
 
 export default userRouter
