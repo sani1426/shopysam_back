@@ -15,7 +15,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(
   cors({
-    origin: 'https://shopysam-next-frqeeh754-sani1426s-projects.vercel.app',
+    origin: 'https://shopysam-next.vercel.app',
     credentials: true,
     allowedHeaders: [
       'Content-Type',
