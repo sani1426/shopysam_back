@@ -34,6 +34,7 @@ const registerController = async (req, res) => {
       email: email,
       password: hashedPassword,
       gender: gender,
+      avatar: 'https://placehold.net/avatar-5.svg'
     })
     const newUser = await user.save()
 
