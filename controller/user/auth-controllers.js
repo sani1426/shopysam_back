@@ -114,13 +114,13 @@ const loginController = async (req, res) => {
       })
     }
 
-    if (!user?.verify_email) {
-      return res.status(402).json({
-        error: true,
-        success: false,
-        message: 'Verify Your Email First ',
-      })
-    }
+    // if (!user?.verify_email) {
+    //   return res.status(402).json({
+    //     error: true,
+    //     success: false,
+    //     message: 'Verify Your Email First ',
+    //   })
+    // }
 
     if (user?.status !== 'Active') {
       return res.status(402).json({
@@ -138,6 +138,9 @@ const loginController = async (req, res) => {
         message: 'password is wrong 😡😡',
       })
     } else {
+      const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+        last_login_date: new Date(),
+      })
       const tokenData = {
         _id: user._id,
       }
@@ -149,12 +152,14 @@ const loginController = async (req, res) => {
       const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
         expiresIn: '12h',
       })
-
-      res.status(200).cookie('token', token, tokenOption).json({
+      res.cookie('token', token, tokenOption)
+      return res.json({
+        message: 'Login successfully',
         error: false,
         success: true,
-        message: 'successfully loged in',
-        data: token,
+        data: {
+          token,
+        },
       })
     }
   } catch (error) {
