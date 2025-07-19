@@ -20,10 +20,10 @@ async function verifyToken(req, res, next) {
       })
   }
 
-      req.userId = decoded?._id
+      req.userId = decode?._id
 
       next()
-    })
+    
   } catch (err) {
     res.status(500).json({
       message: `Server Error ${err}`,
