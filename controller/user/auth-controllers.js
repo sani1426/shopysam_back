@@ -195,46 +195,6 @@ const logoutController = async (req, res) => {
   }
 }
 
-// // upload avatar controller //
-const uploadAvatarController = async (req, res) => {
-  try {
-    const userId = req.userId
-    const user =await UserModel.findById(userId)
-    const {image}= req.body
-    const upload = await cloudinary.uploader.upload(image,{
-      allowed_formats:['png' , 'jpg' ,'jpeg' ,'webp' ,'jifif'],
-      upload_preset:'shopysam'
-    },{
-      function (error , result) {
-        if(error){
-          console.log(error)
-        }
-        if(result){
-          console.log(result)
-        }
-      }
-    })
-
-    const updateUser = await UserModel.findByIdAndUpdate(userId, {
-      avatar: upload?.url,
-    },{new:true})
-
-    res.status(200).json({
-      error: false,
-      success: true,
-      message: 'upload successfully',
-      data: updateUser,
-    })
-  } catch (error) {
-    res.status(500).json({
-      error: true,
-      success: false,
-      message: `server error ${error} `,
-    })
-  }
-}
-
-
 //  // user details controller //
 const userDetailsController = async (req, res) => {
   try {
@@ -465,7 +425,6 @@ export {
   logoutController,
   userDetailsController,
   verifyEmailController,
-  uploadAvatarController,
   updateUserDetailsController,
   forgotPasswordController,
   verifyForgotPasswordOtpController,
