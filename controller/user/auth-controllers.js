@@ -199,9 +199,22 @@ const logoutController = async (req, res) => {
 const uploadAvatarController = async (req, res) => {
   try {
     const userId = req.userId
-    const fileStr = req.body.data
-    const upload = await cloudinary.uploader.upload(fileStr,{upload_preset:'shopysam'})
-    console.log(upload)
+    const user =await UserModel.findById(userId)
+    const {image}= req.body
+    const upload = await cloudinary.uploader.upload(image,{
+      allowed_formats:['png' , 'jpg' ,'jpeg' ,'webp' ,'jifif'],
+      upload_preset:'shopysam'
+    },{
+      function (error , result) {
+        if(error){
+          console.log(error)
+        }
+        if(result){
+          console.log(result)
+        }
+      }
+    })
+
     const updateUser = await UserModel.findByIdAndUpdate(userId, {
       avatar: upload?.url,
     },{new:true})
