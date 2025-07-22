@@ -199,7 +199,7 @@ const logoutController = async (req, res) => {
 const uploadAvatarController = async (req, res) => {
   try {
     const userId = req.userId
-    const fileStr = req.body.avatar
+    const fileStr = req.body.data
     const upload = await cloudinary.uploader.upload(fileStr,{upload_preset:'shopysam'})
     console.log(upload)
     const updateUser = await UserModel.findByIdAndUpdate(userId, {
@@ -220,6 +220,7 @@ const uploadAvatarController = async (req, res) => {
     })
   }
 }
+
 
 //  // user details controller //
 const userDetailsController = async (req, res) => {
