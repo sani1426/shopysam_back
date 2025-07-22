@@ -20,17 +20,12 @@ const userRouter = express.Router()
 userRouter.post('/register', registerController)
 userRouter.post('/verify-email', verifyEmailController)
 userRouter.post('/login', loginController)
-userRouter.put(
-  '/upload-avatar',
-  verifyToken,
-  upload.single('avatar'),
-  uploadAvatarController
-)
+userRouter.post('/upload-avatar', verifyToken, uploadAvatarController)
 userRouter.get('/logout', logoutController)
 userRouter.get('/details', verifyToken, userDetailsController)
-userRouter.put('/update-user', verifyToken,updateUserDetailsController)
-userRouter.put('/forgot-password',forgotPasswordController)
-userRouter.put('/verify-otp',verifyForgotPasswordOtpController)
-userRouter.put('/reset-password',resetPasswordController)
+userRouter.put('/update-user', verifyToken, updateUserDetailsController)
+userRouter.put('/forgot-password', forgotPasswordController)
+userRouter.put('/verify-otp', verifyForgotPasswordOtpController)
+userRouter.put('/reset-password', resetPasswordController)
 
 export default userRouter

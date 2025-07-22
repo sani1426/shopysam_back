@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import UserModel from '../../models/userModel.js'
 import sendEmail from '../../config/sendEmail.js'
 import verifyEmailTemplate from '../../utils/verifyEmailTemplates.js'
-import uploadImageCloudinary from '../../utils/cloudinaryUpload.js'
+import cloudinary from '../../utils/cloudinaryUpload.js'
 import generatedOtp from '../../utils/generatedOtp.js'
 import forgotPasswordTemplate from '../../utils/forgotPasswordTemplate.js'
 
@@ -199,12 +199,12 @@ const logoutController = async (req, res) => {
 const uploadAvatarController = async (req, res) => {
   try {
     const userId = req.userId
-    const image = req.file
-    const upload = await uploadImageCloudinary(image)
-
+    const fileStr = req.body.avatar
+    const upload = await cloudinary.uploader.upload(fileStr,{upload_preset:'shopysam'})
+    console.log(upload)
     const updateUser = await UserModel.findByIdAndUpdate(userId, {
       avatar: upload?.url,
-    })
+    },{new:true})
 
     res.status(200).json({
       error: false,
