@@ -8,7 +8,6 @@ import {
   registerController,
   resetPasswordController,
   updateUserDetailsController,
-  uploadAvatarController,
   userDetailsController,
   verifyEmailController,
   verifyForgotPasswordOtpController,
