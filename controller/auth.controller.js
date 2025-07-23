@@ -226,7 +226,7 @@ const userDetailsController = async (req, res) => {
 const updateUserDetailsController = async (req, res) => {
   try {
     const userId = req.userId //auth middleware
-    const { name, email, mobile, password, gender,role } = req.body
+    const { name, email, mobile, password, gender } = req.body
 
     let hashPassword = ''
     if (password) {
@@ -239,7 +239,6 @@ const updateUserDetailsController = async (req, res) => {
         ...(email && { email: email }),
         ...(mobile && { mobile: mobile }),
         ...(gender && { gender: gender }),
-        ...(role && { role: role }),
         ...(password && { password: hashPassword }),
       },
       { new: true }
