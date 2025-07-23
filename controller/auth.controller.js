@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import UserModel from '../models/userModel.js'
 import sendEmail from '../config/sendEmail.js'
 import verifyEmailTemplate from '../utils/verifyEmailTemplates.js'
-import cloudinary from '../utils/cloudinaryUpload.js'
 import generatedOtp from '../utils/generatedOtp.js'
 import forgotPasswordTemplate from '../utils/forgotPasswordTemplate.js'
 

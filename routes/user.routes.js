@@ -13,7 +13,7 @@ import {
   verifyEmailController,
   verifyForgotPasswordOtpController,
 } from '../controller/auth.controller.js'
-import upload from '../middlewares/multer.js'
+
 
 const userRouter = express.Router()
 
