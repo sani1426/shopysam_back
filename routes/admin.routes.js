@@ -5,6 +5,6 @@ import { getAllUsersController } from '../controller/admin.controller.js'
 
 const adminRouter = express.Router()
 
-adminRouter.get('/all-users' ,  getAllUsersController)
+adminRouter.get('/all-users' , Admin, getAllUsersController)
 
 export default adminRouter
