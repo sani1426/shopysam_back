@@ -23,7 +23,7 @@ adminRouter.post(
   Admin,
   updateCategoryController
 )
-adminRouter.post(
+adminRouter.delete(
   '/delete-category',
   verifyToken,
   Admin,
