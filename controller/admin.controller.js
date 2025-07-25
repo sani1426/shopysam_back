@@ -1,4 +1,6 @@
 import CategoryModel from '../models/category.model.js'
+import ProductModel from '../models/product.model.js'
+import SubCategoryModel from '../models/subCategory.model.js'
 import UserModel from '../models/userModel.js'
 
 //  ========> get all users controller <======== //
@@ -41,7 +43,7 @@ const uploadCategoryController = async (req, res) => {
     })
     const saveCategory = await addCategory.save()
 
-    if(!saveCategory){
+    if (!saveCategory) {
       return res.status(500).json({
         error: true,
         success: false,
@@ -65,33 +67,80 @@ const uploadCategoryController = async (req, res) => {
 }
 
 //  ========> update category controller <======== //
-const updateCategoryController = async (req , res) =>{
+const updateCategoryController = async (req, res) => {
   try {
-    const { _id ,name, image } = req.body 
+    const { _id, name, image } = req.body
 
-    const update = await CategoryModel.updateOne({
-        _id : _id
-    },{
-       name : name ,
-       image :image
-    })
+    const update = await CategoryModel.updateOne(
+      {
+        _id: _id,
+      },
+      {
+        name: name,
+        image: image,
+      }
+    )
 
     return res.json({
-        message : "Updated Category",
-        success : true,
-        error : false,
-        data : update
+      message: 'Updated Category',
+      success: true,
+      error: false,
+      data: update,
     })
-} catch (error) {
+  } catch (error) {
     return res.status(500).json({
-        message : `Server Error ${error}`,
-        error : true,
-        success : false
+      message: `Server Error ${error}`,
+      error: true,
+      success: false,
     })
+  }
 }
+
+//  ========> delete category controller <======== //
+const deleteCategoryController = async (req, res) => {
+  try {
+    const { _id } = request.body
+
+    const checkSubCategory = await SubCategoryModel.find({
+      category: {
+        $in: [_id],
+      },
+    }).countDocuments()
+
+    const checkProduct = await ProductModel.find({
+      category: {
+        $in: [_id],
+      },
+    }).countDocuments()
+
+    if (checkSubCategory > 0 || checkProduct > 0) {
+      return res.status(400).json({
+        message: "Category is already use can't delete",
+        error: true,
+        success: false,
+      })
+    }
+
+    const deleteCategory = await CategoryModel.deleteOne({ _id: _id })
+
+    return res.json({
+      message: 'Delete category successfully',
+      data: deleteCategory,
+      error: false,
+      success: true,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: `Server Error ${error}`,
+      success: false,
+      error: true,
+    })
+  }
 }
 
-
-
-
-export { getAllUsersController, uploadCategoryController ,updateCategoryController}
+export {
+  getAllUsersController,
+  uploadCategoryController,
+  updateCategoryController,
+  deleteCategoryController,
+}
