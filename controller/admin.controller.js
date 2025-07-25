@@ -66,26 +66,27 @@ const uploadCategoryController = async (req, res) => {
 
 //  ========> update category controller <======== //
 const updateCategoryController = async (req , res) =>{
-try {
-  const { _id , name , image} = req.body
+  try {
+    const { _id ,name, image } = req.body 
 
-  const update = CategoryModel.updateOne({
-    _id : _id
-  },{
-    name , image
-  },{new : true})
-  return res.status(201).json({
-    error:false ,
-    success : true ,
-    message : "Successfully Update Category" ,
-    data : update
-  })
-  
+    const update = await CategoryModel.updateOne({
+        _id : _id
+    },{
+       name : name ,
+       image :image
+    })
+
+    return res.json({
+        message : "Updated Category",
+        success : true,
+        error : false,
+        data : update
+    })
 } catch (error) {
     return res.status(500).json({
-      error: false ,
-      success : true ,
-      message : `Server Error ${error}`
+        message : `Server Error ${error}`,
+        error : true,
+        success : false
     })
 }
 }
