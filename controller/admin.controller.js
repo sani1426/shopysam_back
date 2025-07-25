@@ -64,4 +64,33 @@ const uploadCategoryController = async (req, res) => {
   }
 }
 
-export { getAllUsersController, uploadCategoryController }
+//  ========> update category controller <======== //
+const updateCategoryController = async (req , res) =>{
+try {
+  const {categoryId , name , image} = req.body
+
+  const update = CategoryModel.updateOne({
+    _id : categoryId
+  },{
+    name , image
+  },{new : true})
+  return res.status(201).json({
+    error:false ,
+    success : true ,
+    message : "Successfully Update Category" ,
+    data : update
+  })
+  
+} catch (error) {
+    return res.status(500).json({
+      error: false ,
+      success : true ,
+      message : `Server Error ${error}`
+    })
+}
+}
+
+
+
+
+export { getAllUsersController, uploadCategoryController ,updateCategoryController}
