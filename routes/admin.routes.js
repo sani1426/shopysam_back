@@ -8,6 +8,6 @@ const adminRouter = express.Router()
 
 adminRouter.get('/all-users' ,verifyToken, Admin, getAllUsersController)
 adminRouter.post('/upload-category' ,verifyToken, Admin, uploadCategoryController)
-adminRouter.put('/update-category' ,verifyToken, Admin, updateCategoryController)
+adminRouter.post('/update-category' ,verifyToken, Admin, updateCategoryController)
 
 export default adminRouter
