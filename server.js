@@ -9,6 +9,7 @@ import clothRouter from './routes/cloth.routes.js'
 import userRouter from './routes/user.routes.js'
 import adminRouter from './routes/admin.routes.js'
 import uploadRouter from './routes/upload.routes.js'
+import categoryRouter from './routes/category.routes.js'
 
 dotenv.config()
 
@@ -37,6 +38,7 @@ app.use('/api/digitals', digitalRouter)
 app.use('/api/cloth', clothRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/file', uploadRouter)
+app.use('/api/category' , categoryRouter)
 
 //  running server //
 const PORT = process.env.PORT || 8000
