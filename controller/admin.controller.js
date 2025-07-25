@@ -99,7 +99,7 @@ const updateCategoryController = async (req, res) => {
 //  ========> delete category controller <======== //
 const deleteCategoryController = async (req, res) => {
   try {
-    const { _id } = request.body
+    const { _id } = req.body
 
     const checkSubCategory = await SubCategoryModel.find({
       category: {
