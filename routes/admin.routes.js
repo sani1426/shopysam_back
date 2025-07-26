@@ -5,6 +5,7 @@ import {
   getAllUsersController,
   updateCategoryController,
   uploadCategoryController,
+  uploadSubCategoryController,
 } from '../controller/admin.controller.js'
 import verifyToken from '../middlewares/verifyToken.js'
 
@@ -28,6 +29,12 @@ adminRouter.delete(
   verifyToken,
   Admin,
   deleteCategoryController
+)
+adminRouter.post(
+  '/add-subcategory',
+  verifyToken,
+  Admin,
+  uploadSubCategoryController
 )
 
 export default adminRouter

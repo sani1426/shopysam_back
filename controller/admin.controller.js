@@ -138,9 +138,45 @@ const deleteCategoryController = async (req, res) => {
   }
 }
 
+//  ========> upload sub category controller <======== //
+const uploadSubCategoryController = async (req, res) => {
+  try {
+    const { name, image, category } = req.body
+
+    if (!name && !image && !category[0]) {
+      return res.status(400).json({
+        message: 'Provide name, image, category',
+        error: true,
+        success: false,
+      })
+    }
+    const payload = {
+      name,
+      image,
+      category,
+    }
+
+    const createSubCategory = new SubCategoryModel(payload)
+    const newSubCategory = await createSubCategory.save()
+
+    return res.status(201).json({
+      error: false,
+      success: true,
+      message: 'Add New SubCategory Successfully',
+      data: newSubCategory,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      success: false,
+      message: 'Server Error ${error}',
+    })
+  }
+}
 export {
   getAllUsersController,
   uploadCategoryController,
   updateCategoryController,
   deleteCategoryController,
+  uploadSubCategoryController
 }
