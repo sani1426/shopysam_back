@@ -2,8 +2,10 @@ import express from 'express'
 import Admin from '../middlewares/Admin.js'
 import {
   deleteCategoryController,
+  deleteSubCategoryController,
   getAllUsersController,
   updateCategoryController,
+  updateSubCategoryController,
   uploadCategoryController,
   uploadSubCategoryController,
 } from '../controller/admin.controller.js'
@@ -35,6 +37,18 @@ adminRouter.post(
   verifyToken,
   Admin,
   uploadSubCategoryController
+)
+adminRouter.put(
+  '/update-subcategory',
+  verifyToken,
+  Admin,
+  updateSubCategoryController
+)
+adminRouter.delete(
+  '/delete-subcategory',
+  verifyToken,
+  Admin,
+  deleteSubCategoryController
 )
 
 export default adminRouter

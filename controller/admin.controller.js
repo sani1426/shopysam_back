@@ -173,10 +173,73 @@ const uploadSubCategoryController = async (req, res) => {
     })
   }
 }
+
+//  ========> update sub category controller <======== //
+const updateSubCategoryController = async (req, res) => {
+  try {
+    const { _id, name, image, category } = req.body
+
+    const checkSub = await SubCategoryModel.findById(_id)
+    if (!checkSub) {
+      return res.status(404).json({
+        error: true,
+        success: false,
+        message: 'Check your _id',
+      })
+    }
+
+    const update = await SubCategoryModel.findByIdAndUpdate(
+      _id,
+      {
+        name,
+        image,
+        category,
+      },
+      { new: true }
+    )
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      message: 'Updated Successfully',
+      data: update,
+    })
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      success: false,
+      message: `Server Error ${error}`,
+    })
+  }
+}
+
+//  ========> delete sub category controller <======== //
+const deleteSubCategoryController = async (req, res) => {
+  try {
+    const { _id } = req.body
+
+    const deleted = await SubCategoryModel.findByIdAndDelete(_id)
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      message: 'Deleted Successfully',
+      data: deleted,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      success: false,
+      message: `Server Error ${error}`,
+    })
+  }
+}
 export {
   getAllUsersController,
   uploadCategoryController,
   updateCategoryController,
   deleteCategoryController,
-  uploadSubCategoryController
+  uploadSubCategoryController,
+  updateSubCategoryController,
+  deleteSubCategoryController,
 }
