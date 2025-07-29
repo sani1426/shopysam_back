@@ -61,4 +61,25 @@ const createProductController = async (req, res) => {
   }
 }
 
-export { createProductController }
+const getAllProductController = async (req,res) => {
+  try {
+    
+    const allProducts = await ProductModel.find().populate('category subCategory')
+    const counter = await ProductModel.countDocuments()
+
+    return res.status(200).json({
+      error:false ,
+      success : true ,
+      message : 'Success',
+      data:allProducts ,
+      counter : counter
+    })
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      success: false,
+      message: `Server Error ${error}`,
+    })
+  }
+}
+export { createProductController,getAllProductController }
