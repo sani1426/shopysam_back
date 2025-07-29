@@ -41,6 +41,7 @@ app.use('/api/admin', adminRouter)
 app.use('/api/file', uploadRouter)
 app.use('/api/category' , categoryRouter)
 app.use('/api/subcategory' , subCategoryRouter)
+app.use('/api/product' , productRouter)
 
 //  running server //
 const PORT = process.env.PORT || 8000
