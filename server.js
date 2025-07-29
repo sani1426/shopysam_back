@@ -11,6 +11,7 @@ import adminRouter from './routes/admin.routes.js'
 import uploadRouter from './routes/upload.routes.js'
 import categoryRouter from './routes/category.routes.js'
 import subCategoryRouter from './routes/subCategory.routes.js'
+import productRouter from './routes/product.routes.js'
 
 dotenv.config()
 
