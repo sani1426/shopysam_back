@@ -82,4 +82,66 @@ const getAllProductController = async (req,res) => {
     })
   }
 }
-export { createProductController,getAllProductController }
+
+const updateProductController = async (req,res) => {
+  try {
+    const {_id} = req.body
+
+    if(!_id){
+      return res.status(400).json({
+          message : "provide product _id",
+          error : true,
+          success : false
+      })
+  }
+
+  const updateProduct = await ProductModel.updateOne({ _id : _id },{
+    ...req.body
+},{new : true})
+    
+return res.status(201).json({
+  error : false ,
+  success : true ,
+  message : "Product Updated Successfully",
+  data : updateProduct
+})
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      success: false,
+      message: `Server Error ${error}`,
+    })
+  }
+}
+
+
+const deleteProductController = async (req, res) => {
+  try {
+    const {_id} = req.body
+
+    if(!_id){
+      return res.status(400).json({
+          message : "provide product _id",
+          error : true,
+          success : false
+      })
+  }
+
+  const deleteProduct = await ProductModel.deleteOne({_id : _id})
+
+  return res.status(200).json({
+    error: false ,
+    success : true ,
+    message: "Product Successfully Deleted",
+    data: deleteProduct
+  })
+    
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      success: false,
+      message: `Server Error ${error}`,
+    })
+  }
+}
+export { createProductController,getAllProductController ,updateProductController ,deleteProductController}
