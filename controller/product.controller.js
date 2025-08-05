@@ -114,7 +114,6 @@ return res.status(201).json({
   }
 }
 
-
 const deleteProductController = async (req, res) => {
   try {
     const {_id} = req.body
@@ -144,4 +143,39 @@ const deleteProductController = async (req, res) => {
     })
   }
 }
-export { createProductController,getAllProductController ,updateProductController ,deleteProductController}
+
+const getProductByCategoryController = async (req,res)=>{
+  try {
+    const {id} = req.body
+
+    if(!id) {
+      return res.status(400).json({
+        error : true ,
+        success : false ,
+        message : "provide category id"
+      })
+    }
+
+    const products = await ProductModel.find({
+      category : { $in : id }
+    }).limit(10)
+
+    return res.status(200).json({
+      error : false ,
+      success : true ,
+      message : "Successfully Get Products By Category" ,
+      data : products
+    })
+    
+  } catch (error) {
+    res.status(500).json({
+      error: true ,
+      success : false ,
+      message : `Server Error ${error}`
+    })
+  }
+
+}
+
+
+export { createProductController,getAllProductController ,updateProductController ,deleteProductController,getProductByCategoryController}
