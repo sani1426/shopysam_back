@@ -191,7 +191,9 @@ const getProductDetailsController = async (req, res) => {
       })
     }
 
-    const details = await ProductModel.findById(id)
+    const details = await ProductModel.findById(id).populate(
+      'category subCategory'
+    )
 
     if (!details) {
       return res.status(404).json({
