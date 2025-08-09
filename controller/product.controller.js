@@ -181,7 +181,7 @@ const getProductByCategoryController = async (req, res) => {
 
 const getProductDetailsController = async (req, res) => {
   try {
-    const { id } = req.body
+    const { id } = req.query
 
     if (!id) {
       return res.status(400).json({
