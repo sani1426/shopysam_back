@@ -11,6 +11,6 @@ productRouter.put('/update' ,verifyToken,Admin,updateProductController)
 productRouter.delete('/delete' ,verifyToken,Admin,deleteProductController)
 productRouter.get('/all' ,getAllProductController)
 productRouter.post('/by-category' ,getProductByCategoryController)
-productRouter.post('/details/:id' ,getProductDetailsController)
+productRouter.post('/details' ,getProductDetailsController)
 
 export default productRouter
