@@ -232,9 +232,10 @@ try {
     })
   }
 
+  const skip = (pageNumber - 1) * limit
   const products = await ProductModel.find({
     subCategory : {$in : subCategoryId}
-  }).skip((pageNumber - 1) * limit).limit(limit)
+  }).skip(skip).limit(limit)
 
   if (!products){
     return res.status(404).json({
@@ -244,9 +245,9 @@ try {
     })
   }
 
-  const total = await ProductModel.find({
+  const total = await ProductModel.countDocuments({
     subCategory : {$in : subCategoryId}
-  }).countDocuments()
+  })
   
   return res.status(200).json({
     error : false ,
