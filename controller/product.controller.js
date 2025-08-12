@@ -218,6 +218,52 @@ const getProductDetailsController = async (req, res) => {
   }
 }
 
+const getProductBySubCategoryController = async (req , res)=>{
+try {
+  const {subCategoryId} = req.body
+  const pageNumber = req.query || 1
+  const limit = 10
+
+  if (!subCategoryId){
+    return res.status(400).json({
+      error: true ,
+      success: false ,
+      message : "Must Provide Valid Id"
+    })
+  }
+
+  const products = await ProductModel.find({
+    subCategory : {$in : subCategoryId}
+  }).skip((pageNumber - 1) * limit).limit(limit)
+
+  if (!products){
+    return res.status(404).json({
+      error : true ,
+      success : false ,
+      message : "Product Not Found"
+    })
+  }
+
+  const total = await ProductModel.find({
+    subCategory : {$in : subCategoryId}
+  }).countDocuments()
+  
+  return res.status(200).json({
+    error : false ,
+    success : true ,
+    message : "Successfully Get Products" ,
+    totalProducts : total ,
+    data : products
+  })
+} catch (error) {
+  return res.status(500).json({
+    error : true ,
+    success : false ,
+    message : `Server Error ${error}`
+  })
+}
+}
+
 export {
   createProductController,
   getAllProductController,
@@ -225,4 +271,5 @@ export {
   deleteProductController,
   getProductByCategoryController,
   getProductDetailsController,
+  getProductBySubCategoryController,
 }
