@@ -220,7 +220,7 @@ const getProductDetailsController = async (req, res) => {
 
 const getProductBySubCategoryController = async (req , res)=>{
 try {
-  const {subCategoryId,pageNumber,limit} = req.body
+  let {subCategoryId,pageNumber,limit} = req.body
 
  
 
