@@ -220,9 +220,9 @@ const getProductDetailsController = async (req, res) => {
 
 const getProductBySubCategoryController = async (req , res)=>{
 try {
-  const {subCategoryId} = req.body
-  const pageNumber = req.query || 1
-  const limit = 2
+  const {subCategoryId,pageNumber,limit} = req.body
+
+ 
 
   if (!subCategoryId){
     return res.status(400).json({
@@ -231,11 +231,20 @@ try {
       message : "Must Provide Valid Id"
     })
   }
+  if(!pageNumber){
+    pageNumber = 1
+}
 
+if(!limit){
+    limit = 2
+}
+
+  const query = {
+    subCategory : { $in : subCategoryId }
+}
   const skip = (pageNumber - 1) * limit
-  const products = await ProductModel.find({
-    subCategory : {$in : subCategoryId}
-  }).skip(skip).limit(limit)
+
+  const products = await ProductModel.find(query).skip(skip).limit(limit)
 
   if (!products){
     return res.status(404).json({
@@ -245,9 +254,7 @@ try {
     })
   }
 
-  const total = await ProductModel.countDocuments({
-    subCategory : {$in : subCategoryId}
-  })
+  const total = await ProductModel.countDocuments(query)
   
   return res.status(200).json({
     error : false ,
