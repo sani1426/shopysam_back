@@ -18,5 +18,49 @@ const getSubCategoryController = async(req,res)=>{
             })
         }
     }
+
+
+    const getSubCategoryByCategoryId = async (req , res) => {
+
+        try {
+            const {categoryId} = req.body
+
+            if (!categoryId) {
+                return res.status(400).json({
+                    error : true ,
+                    success : false ,
+                    message : "Must Provide Valid Id"
+                })
+            }
+
+            const sub = await SubCategoryModel.find({
+                category: { $in: categoryId },
+            })
+
+            if (!sub) {
+                return res.status(404).json({
+                    error : true ,
+                    success : true ,
+                    message : "Sub Category Not Found"
+                })
+            }
+
+            return res.status(200).json({
+                error : false ,
+                success : true ,
+                message : 'Successfully Found Sub Category' ,
+                data : sub
+            })
+        } catch (error) {
+            return res.status(500).json({
+                error : true ,
+                success : false ,
+                message : `Server Error ${error}`
+            })
+        }
+
+
+        
+    }
     
-    export {getSubCategoryController}
+    export {getSubCategoryController , getSubCategoryByCategoryId}
