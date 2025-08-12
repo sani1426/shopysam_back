@@ -222,7 +222,7 @@ const getProductBySubCategoryController = async (req , res)=>{
 try {
   const {subCategoryId} = req.body
   const pageNumber = req.query || 1
-  const limit = 10
+  const limit = 2
 
   if (!subCategoryId){
     return res.status(400).json({
