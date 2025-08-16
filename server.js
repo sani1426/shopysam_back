@@ -4,8 +4,6 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import ConnectToDb from './config/db.js'
-import digitalRouter from './routes/digital.routes.js'
-import clothRouter from './routes/cloth.routes.js'
 import userRouter from './routes/user.routes.js'
 import adminRouter from './routes/admin.routes.js'
 import uploadRouter from './routes/upload.routes.js'
@@ -36,8 +34,6 @@ app.use(
 //  routes  //
 
 app.use('/api/auth', userRouter)
-app.use('/api/digitals', digitalRouter)
-app.use('/api/cloth', clothRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/file', uploadRouter)
 app.use('/api/category' , categoryRouter)

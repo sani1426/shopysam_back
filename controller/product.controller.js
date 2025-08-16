@@ -150,7 +150,7 @@ const deleteProductController = async (req, res) => {
 
 const getProductByCategoryController = async (req, res) => {
   try {
-    const { id } = req.body
+    const { id , limit , pageNumber } = req.body
 
     if (!id) {
       return res.status(400).json({
@@ -160,14 +160,24 @@ const getProductByCategoryController = async (req, res) => {
       })
     }
 
+    if (!pageNumber) pageNumber = 1
+    if (!limit) limit = 10 ;
+
+    let skip = (pageNumber - 1) * limit ;
+
     const products = await ProductModel.find({
       category: { $in: id },
-    }).limit(10)
+    }).skip(skip).limit(limit)
+
+    const totalProducts = await ProductModel.countDocuments({
+      category : {$in : id}
+    })
 
     return res.status(200).json({
       error: false,
       success: true,
       message: 'Successfully Get Products By Category',
+      total : totalProducts ,
       data: products,
     })
   } catch (error) {
@@ -236,7 +246,7 @@ try {
 }
 
 if(!limit){
-    limit = 2
+    limit = 10
 }
 
   const query = {
