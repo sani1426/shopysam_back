@@ -150,7 +150,7 @@ const deleteProductController = async (req, res) => {
 
 const getProductByCategoryController = async (req, res) => {
   try {
-    const { id , limit , pageNumber } = req.body
+    let { id , limit , pageNumber } = req.body
 
     if (!id) {
       return res.status(400).json({
