@@ -232,14 +232,6 @@ const getProductDetailsController = async (req, res) => {
   try {
       let { categoryId,subCategoryId,page,limit } = req.body
 
-      if(!categoryId && !subCategoryId){
-          return res.status(400).json({
-              message : "Provide categoryId and subCategoryId",
-              error : true,
-              success : false
-          })
-      }
-
       if(!page){
           page = 1
       }
