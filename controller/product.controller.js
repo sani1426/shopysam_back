@@ -248,10 +248,25 @@ const getProductDetailsController = async (req, res) => {
           limit = 10
       }
 
-      const query = {
-         ...( category && category : { $in :categoryId  }),
-          ...(subCategory && subCategory : { $in : subCategoryId })
+      let query ;
+
+      if(categoryId || subCategoryId) {
+        query = {
+         category : { $in :categoryId  },
+        subCategory : { $in : subCategoryId }
       }
+    }
+      if(!categoryId || subCategoryId) {
+        query = {
+        subCategory : { $in : subCategoryId }
+      }
+    }
+      if(categoryId || !subCategoryId) {
+        query = {
+        category : { $in : categoryId }
+      }
+    }
+    
 
       const skip = (page - 1) * limit
 
