@@ -232,7 +232,7 @@ const getProductDetailsController = async (req, res) => {
   try {
       let { categoryId,subCategoryId,page,limit } = req.body
 
-      if(!categoryId || !subCategoryId){
+      if(!categoryId && !subCategoryId){
           return res.status(400).json({
               message : "Provide categoryId and subCategoryId",
               error : true,
@@ -249,8 +249,8 @@ const getProductDetailsController = async (req, res) => {
       }
 
       const query = {
-          category : { $in :categoryId  },
-          subCategory : { $in : subCategoryId }
+         ...( category && category : { $in :categoryId  }),
+          ...(subCategory && subCategory : { $in : subCategoryId })
       }
 
       const skip = (page - 1) * limit
