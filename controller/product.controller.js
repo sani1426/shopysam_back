@@ -228,58 +228,55 @@ const getProductDetailsController = async (req, res) => {
   }
 }
 
-const getProductBySubCategoryController = async (req , res)=>{
-try {
-  let {subCategoryId,pageNumber,limit} = req.body
+export const getProductByCategoryAndSubCategory  = async(req , res)=>{
+  try {
+      let { categoryId,subCategoryId,page,limit } = req.body
 
- 
+      if(!categoryId || !subCategoryId){
+          return res.status(400).json({
+              message : "Provide categoryId and subCategoryId",
+              error : true,
+              success : false
+          })
+      }
 
-  if (!subCategoryId){
-    return res.status(400).json({
-      error: true ,
-      success: false ,
-      message : "Must Provide Valid Id"
-    })
+      if(!page){
+          page = 1
+      }
+
+      if(!limit){
+          limit = 10
+      }
+
+      const query = {
+          category : { $in :categoryId  },
+          subCategory : { $in : subCategoryId }
+      }
+
+      const skip = (page - 1) * limit
+
+      const [data,count] = await Promise.all([
+          ProductModel.find(query).sort({createdAt : -1 }).skip(skip).limit(limit),
+          ProductModel.countDocuments(query)
+      ])
+
+      return res.json({
+          message : "Product list",
+          data : data,
+          totalCount : count,
+          page : page,
+          limit : limit,
+          success : true,
+          error : false
+      })
+
+  } catch (error) {
+      return res.status(500).json({
+          message :`Server Error ${error}`,
+          error : true,
+          success : false
+      })
   }
-  if(!pageNumber){
-    pageNumber = 1
-}
-
-if(!limit){
-    limit = 10
-}
-
-  const query = {
-    subCategory : { $in : subCategoryId }
-}
-  const skip = (pageNumber - 1) * limit
-
-  const products = await ProductModel.find(query).skip(skip).limit(limit)
-
-  if (!products){
-    return res.status(404).json({
-      error : true ,
-      success : false ,
-      message : "Product Not Found"
-    })
-  }
-
-  const total = await ProductModel.countDocuments(query)
-  
-  return res.status(200).json({
-    error : false ,
-    success : true ,
-    message : "Successfully Get Products" ,
-    totalProducts : total ,
-    data : products
-  })
-} catch (error) {
-  return res.status(500).json({
-    error : true ,
-    success : false ,
-    message : `Server Error ${error}`
-  })
-}
 }
 
 export {
@@ -289,5 +286,5 @@ export {
   deleteProductController,
   getProductByCategoryController,
   getProductDetailsController,
-  getProductBySubCategoryController,
+  getProductByCategoryAndSubCategory,
 }
