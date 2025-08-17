@@ -228,7 +228,7 @@ const getProductDetailsController = async (req, res) => {
   }
 }
 
-export const getProductByCategoryAndSubCategory  = async(req , res)=>{
+ const getProductByCategoryAndSubCategory  = async(req , res)=>{
   try {
       let { categoryId,subCategoryId,page,limit } = req.body
 
